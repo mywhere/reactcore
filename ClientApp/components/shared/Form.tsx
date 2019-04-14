@@ -1,18 +1,15 @@
 import * as React from "react";
 import { NSerializeJson } from "nserializejson";
-import { emptyForm } from "@Utils";
 import { NValTippy } from "nval-tippy";
 import bind from 'bind-decorator';
+
+import { emptyForm } from "@Utils";
 
 export interface IProps extends React.DetailedHTMLProps<React.FormHTMLAttributes<HTMLFormElement>, HTMLFormElement> {
     children: any;
 }
 
 export class Form extends React.Component<IProps, {}> {
-    constructor(props) {
-        super(props);
-    }
-
     public validator: NValTippy;
     protected elForm: HTMLFormElement;
 
@@ -35,7 +32,11 @@ export class Form extends React.Component<IProps, {}> {
         this.validator = new NValTippy(this.elForm);
     }
 
-    render() {
-        return <form {...this.props} ref={x => this.elForm = x}>{this.props.children}</form>;
+    render(): JSX.Element {
+        return (
+            <form {...this.props} ref={x => this.elForm = x}>
+                {this.props.children}
+            </form>
+        );
     }
 }

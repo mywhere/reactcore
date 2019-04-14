@@ -1,6 +1,10 @@
 import * as React from "react";
 
-export default class ErrorBoundary extends React.Component<{}, {hasError: boolean}> {
+interface ErrorBoundaryState {
+    hasError: boolean;
+}
+
+export default class ErrorBoundary extends React.Component<{}, ErrorBoundaryState> {
     constructor(props) {
         super(props);
         this.state = { hasError: false };
@@ -13,8 +17,9 @@ export default class ErrorBoundary extends React.Component<{}, {hasError: boolea
 
     render() {
         if (this.state.hasError) {
-            return <b>Something went wrong.</b>;
+            return (<strong>Something went wrong.</strong>);
         }
-        return this.props.children as any;
+
+        return this.props.children;
     }
 }

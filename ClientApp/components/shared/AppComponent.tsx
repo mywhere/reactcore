@@ -12,10 +12,6 @@ export default abstract class AppComponent<TProps = {}, TState = {}> extends Rea
      */
     protected renderKey = 0;
 
-    constructor(props) {
-        super(props);
-    }
-
     /**
      * Call this if component state is stuck.
      * But you should set the renderKey to the element's attribute.
