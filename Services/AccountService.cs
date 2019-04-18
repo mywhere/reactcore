@@ -14,7 +14,7 @@ namespace reactcore.Services
         {
             context.Response.Cookies.Append(Constants.AuthorizationCookieKey, login);
 
-            return Ok(new ServiceUser
+            return Ok(new ServiceUser()
             {
                 Login = login
             });
@@ -24,8 +24,11 @@ namespace reactcore.Services
         {
             var cookieValue = context.Request.Cookies[Constants.AuthorizationCookieKey];
             if (string.IsNullOrEmpty(cookieValue))
+            {
                 return Error<ServiceUser>();
-            return Ok(new ServiceUser
+            }
+                
+            return Ok(new ServiceUser()
             {
                 Login = cookieValue
             });

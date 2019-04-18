@@ -1,24 +1,21 @@
-import { IPersonModel } from "@Models/IPersonModel";
 import * as React from "react";
 import bind from 'bind-decorator';
-import { Form } from "@Components/shared/Form";
 import { Formik } from 'formik';
+
+import { IPersonModel } from "@Models/IPersonModel";
+import { Form } from "@Components/shared/Form";
 
 export interface IProps {
     data: IPersonModel;
 }
 
-export default class PersonEditor extends React.Component<IProps, {}> {
-    constructor(props: IProps) {
-        super(props);
-    }
-
-    public elForm: Form;
+export default class PersonEditor extends React.PureComponent<IProps> {
+    public form: React.RefObject<any> = React.createRef();
 
     @bind
     public emptyForm(): void {
-        if (this.elForm) {
-            this.elForm.emptyForm();
+        if (this.form.current) {
+            this.form.current.emptyForm();
         }
     }
 
@@ -39,7 +36,7 @@ export default class PersonEditor extends React.Component<IProps, {}> {
                     handleBlur,
                     /* and other goodies */
                 }) => (
-                        <Form className="form" ref={x => this.elForm = x}>
+                        <Form className="form" ref={this.form}>
                             <input type="hidden" name="id" defaultValue={(this.props.data.id || 0).toString()} />
                             <div className="form-group">
                                 <label className="control-label required" htmlFor="person__firstName">First name</label>

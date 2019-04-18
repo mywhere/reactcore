@@ -20,7 +20,7 @@ import { IPublicSession } from "@Models/IPublicSession";
 import { IPrivateSession } from "@Models/IPrivateSession";
 import { NSerializeJson } from "nserializejson";
 
-function setupSession() {
+function setupSession(): void {
     if (!isNode()) {
         Globals.reset();
         Globals.init({ 
@@ -30,12 +30,12 @@ function setupSession() {
     }
 };
 
-function setupGlobalPlugins() {
+function setupGlobalPlugins(): void {
     // Use dot notation in the name attributes of the form inputs.
     NSerializeJson.options.useDotSeparatorInPath = true;
 };
 
-function setupEvents() {
+function setupEvents(): void {
     document.addEventListener('DOMContentLoaded', () => {
         var preloader = document.getElementById("preloader");
         preloader.classList.add("hidden");
@@ -50,7 +50,7 @@ const history = createBrowserHistory({ basename: baseUrl });
 const initialState = (window as any).initialReduxState as ApplicationState;
 const store = configureStore(history, initialState);
 
-function renderApp() {
+function renderApp(): void {
     // This code starts up the React app when it runs in a browser. It sets up the routing configuration
     // and injects the app into a DOM element.
     ReactDOM.hydrate(

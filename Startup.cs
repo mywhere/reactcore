@@ -54,7 +54,7 @@ namespace reactcore
             // Build your own authorization system or use Identity.
             app.Use(async (context, next) =>
             {
-                var accountService = (AccountService)context.RequestServices.GetService(typeof(AccountService));
+                var accountService = context.RequestServices.GetService(typeof(AccountService)) as AccountService;
                 var verifyResult = accountService.Verify(context);
                 if (!verifyResult.HasErrors)
                 {
@@ -67,10 +67,11 @@ namespace reactcore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseWebpackDevMiddleware(new WebpackDevMiddlewareOptions
-                {
-                    HotModuleReplacement = true
-                });
+                app.UseWebpackDevMiddleware(
+                    new WebpackDevMiddlewareOptions()
+                    {
+                        HotModuleReplacement = true
+                    });
             }
             else
             {

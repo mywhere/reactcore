@@ -9,9 +9,10 @@ export interface IProps extends React.DetailedHTMLProps<React.FormHTMLAttributes
     children: any;
 }
 
-export class Form extends React.Component<IProps, {}> {
+export class Form extends React.PureComponent<IProps> {
     public validator: NValTippy;
-    protected elForm: HTMLFormElement;
+
+    protected form: React.RefObject<HTMLFormElement> = React.createRef<HTMLFormElement>();
 
     @bind
     public isValid(): boolean {
@@ -20,21 +21,21 @@ export class Form extends React.Component<IProps, {}> {
     
     @bind
     public emptyForm(): void {
-        emptyForm(this.elForm);
+        emptyForm(this.form.current);
     }
     
     @bind
     public getData<T>(): T {
-        return NSerializeJson.serializeForm(this.elForm) as any as T;
+        return NSerializeJson.serializeForm(this.form.current) as any as T;
     }
 
     componentDidMount() {
-        this.validator = new NValTippy(this.elForm);
+        this.validator = new NValTippy(this.form.current);
     }
 
     render(): JSX.Element {
         return (
-            <form {...this.props} ref={x => this.elForm = x}>
+            <form {...this.props} ref={this.form}>
                 {this.props.children}
             </form>
         );

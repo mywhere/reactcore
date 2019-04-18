@@ -97,14 +97,14 @@ class ExamplePage extends React.Component<Props, IState> {
     async onClickPersonEditorAdd__saveBtn(e: React.MouseEvent<HTMLButtonElement>) {
         e.preventDefault();
 
-        if (!this.personEditorAdd.elForm.isValid()) {
+        if (!this.personEditorAdd.form.current.isValid()) {
             // Form is not valid.
             return;
         }
 
         var result =
             await getPromiseFromAction(
-                this.props.addRequest(this.personEditorAdd.elForm.getData())
+                this.props.addRequest(this.personEditorAdd.form.current.getData())
             );
 
         if (!result.hasErrors) {
@@ -115,12 +115,12 @@ class ExamplePage extends React.Component<Props, IState> {
 
     @bind
     async onClickPersonEditorEdit__saveBtn(_e: React.MouseEvent<HTMLButtonElement>) {
-        if (!this.personEditorEdit.elForm.isValid()) {
+        if (!this.personEditorEdit.form.current.isValid()) {
             // Form is not valid.
             return;
         }
 
-        var data = this.personEditorEdit.elForm.getData();
+        var data = this.personEditorEdit.form.current.getData();
 
         var result = await getPromiseFromAction(
             this.props.updateRequest(data)
@@ -163,94 +163,95 @@ class ExamplePage extends React.Component<Props, IState> {
         this.pagingBar.setFirstPage();
     }
 
-    render() {
+    render(): JSX.Element {
+        return (
+            <div>
+                <Helmet>
+                    <title>Example - RCB</title>
+                </Helmet>
 
-        return <div>
-            <Helmet>
-                <title>Example - RCB</title>
-            </Helmet>
+                <Loader show={this.props.indicators.operationLoading} />
 
-            <Loader show={this.props.indicators.operationLoading} />
-
-            <div className="panel panel-default">
-                <div className="panel-body row">
-                    <div className="col-sm-1">
-                        <button className="btn btn-success" onClick={this.onClickShowAddModal}>Add</button>
-                    </div>
-                    <div className="col-sm-11">
-                        <input
-                            type="text"
-                            className="form-control"
-                            defaultValue={""}
-                            onChange={this.onChangeSearchInput}
-                            placeholder={"Search for people..."}
-                        />
+                <div className="panel panel-default">
+                    <div className="panel-body row">
+                        <div className="col-sm-1">
+                            <button className="btn btn-success" onClick={this.onClickShowAddModal}>Add</button>
+                        </div>
+                        <div className="col-sm-11">
+                            <input
+                                type="text"
+                                className="form-control"
+                                defaultValue={""}
+                                onChange={this.onChangeSearchInput}
+                                placeholder={"Search for people..."}
+                            />
+                        </div>
                     </div>
                 </div>
+
+                <table className="table">
+                    <thead>
+                        <tr>
+                            <th>First name</th><th>Last name</th><th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.renderRows(this.props.people)}
+                    </tbody>
+                </table>
+
+                {/* Add modal */}
+                <ModalComponent
+                    ref={x => this.elModalAdd = x}
+                    buttons={<div>
+                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-primary" onClick={this.onClickPersonEditorAdd__saveBtn}>Save</button>
+                    </div>}
+                    title="Add person"
+                    onHide={() => {
+                        if (this.personEditorAdd) {
+                            this.personEditorAdd.emptyForm();
+                        }
+                    }}>
+                    <PersonEditor ref={x => this.personEditorAdd = x} data={{}} />
+                </ModalComponent>
+
+                {/* Edit modal */}
+                <ModalComponent
+                    ref={x => this.elModalEdit = x}
+                    buttons={<div>
+                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-primary" onClick={this.onClickPersonEditorEdit__saveBtn}>Save</button>
+                    </div>}
+                    title={`Edit person: ${this.state.modelForEdit.firstName} ${this.state.modelForEdit.lastName}`}
+                    onHide={() => {
+                        if (this.personEditorEdit) {
+                            this.setState({ modelForEdit: {} });
+                        }
+                    }}>
+                    <PersonEditor ref={x => this.personEditorEdit = x} data={this.state.modelForEdit} />
+                </ModalComponent>
+
+                {/* Delete modal */}
+                <ModalComponent
+                    ref={x => this.elModalDelete = x}
+                    buttons={<div>
+                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" className="btn btn-danger" onClick={this.onClickPersonEditorDelete__saveBtn}>Delete</button>
+                    </div>}
+                    title={`Delete person: ${this.state.modelForEdit.firstName} ${this.state.modelForEdit.lastName}`}>
+                    <p>Do you really want to delete this person?</p>
+                </ModalComponent>
+
+                <PagingBar
+                    ref={x => this.pagingBar = x}
+                    totalResults={this.props.people.length}
+                    limitPerPage={this.state.limitPerPage}
+                    currentPage={this.state.pageNum}
+                    onChangePage={this.onChangePage}
+                />
             </div>
-
-            <table className="table">
-                <thead>
-                    <tr>
-                        <th>First name</th><th>Last name</th><th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {this.renderRows(this.props.people)}
-                </tbody>
-            </table>
-
-            {/* Add modal */}
-            <ModalComponent
-                ref={x => this.elModalAdd = x}
-                buttons={<div>
-                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-primary" onClick={this.onClickPersonEditorAdd__saveBtn}>Save</button>
-                </div>}
-                title="Add person"
-                onHide={() => {
-                    if (this.personEditorAdd) {
-                        this.personEditorAdd.emptyForm();
-                    }
-                }}>
-                <PersonEditor ref={x => this.personEditorAdd = x} data={{}} />
-            </ModalComponent>
-
-            {/* Edit modal */}
-            <ModalComponent
-                ref={x => this.elModalEdit = x}
-                buttons={<div>
-                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-primary" onClick={this.onClickPersonEditorEdit__saveBtn}>Save</button>
-                </div>}
-                title={`Edit person: ${this.state.modelForEdit.firstName} ${this.state.modelForEdit.lastName}`}
-                onHide={() => {
-                    if (this.personEditorEdit) {
-                        this.setState({ modelForEdit: {} });
-                    }
-                }}>
-                <PersonEditor ref={x => this.personEditorEdit = x} data={this.state.modelForEdit} />
-            </ModalComponent>
-
-            {/* Delete modal */}
-            <ModalComponent
-                ref={x => this.elModalDelete = x}
-                buttons={<div>
-                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" className="btn btn-danger" onClick={this.onClickPersonEditorDelete__saveBtn}>Delete</button>
-                </div>}
-                title={`Delete person: ${this.state.modelForEdit.firstName} ${this.state.modelForEdit.lastName}`}>
-                <p>Do you really want to delete this person?</p>
-            </ModalComponent>
-
-            <PagingBar
-                ref={x => this.pagingBar = x}
-                totalResults={this.props.people.length}
-                limitPerPage={this.state.limitPerPage}
-                currentPage={this.state.pageNum}
-                onChangePage={this.onChangePage}
-            />
-        </div>;
+        );
     }
 }
 

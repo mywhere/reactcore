@@ -1,8 +1,9 @@
-﻿import { Ui } from "@Ui";
-import Result from "@Models/Result";
-import Axios, { AxiosRequestConfig } from "axios";
+﻿import Axios, { AxiosRequestConfig } from "axios";
 import { transformUrl } from "domain-wait";
 import jsonToUrl from "json-to-url";
+
+import { Ui } from "@Ui";
+import Result from "@Models/Result";
 import { isNode } from "@Utils";
 import Globals from "@Globals";
 
@@ -28,20 +29,19 @@ export abstract class ServiceBase {
      * @param opts
      */
     public static async requestJson<T>(opts: IRequestOptions): Promise<Result<T>> {
-
-        var axiosResult = null;
-        var result = null;
+        let axiosResult = null;
+        let result: Result<T> = null;
 
         opts.url = transformUrl(opts.url); // Allow requests also for the Node.
 
-        var processQuery = (url: string, data: any): string => {
+        const processQuery = (url: string, data: any): string => {
             if (data) {
                 return `${url}?${jsonToUrl(data)}`;
             }
             return url;
         };
 
-        var axiosRequestConfig : AxiosRequestConfig;
+        let axiosRequestConfig : AxiosRequestConfig;
 
         if (isNode()) {
             // Make SSR requests 'authorized' from the NodeServices to the web server.
@@ -87,12 +87,12 @@ export abstract class ServiceBase {
      * @param opts
      */
     public static async sendFormData<T>(opts: ISendFormDataOptions): Promise<Result<T>> {
-        var axiosResult = null;
-        var result = null;
+        let axiosResult = null;
+        let result: Result<T> = null;
 
         opts.url = transformUrl(opts.url); // Allow requests also for Node.
 
-        var axiosOpts = {
+        const axiosOpts: AxiosRequestConfig = {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }

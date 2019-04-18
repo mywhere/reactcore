@@ -5,9 +5,7 @@ import { INodeSession } from "@Models/INodeSession";
  * Contains global isomorphic session.
  */
 export default class Globals {
-
     private static isInitialized: boolean = false;
-
     private static session: INodeSession = {};
 
     public static reset(): void {
@@ -38,7 +36,7 @@ export default class Globals {
         return this.session;
     }
 
-    public static setSession(session: INodeSession) {
+    public static setSession(session: INodeSession): void {
         this.throwIfNotInitialized();
         // Update session object by the new data.
         this.session = { ...this.session, ...session };
@@ -58,7 +56,9 @@ export default class Globals {
     }
 
     public static set serviceUser(serviceUser: IServiceUser) {
-        this.setSession({ public: { serviceUser } });
+        this.setSession({ 
+            public: { serviceUser } 
+        });
     }
 
     public static get isAuthenticated(): boolean {

@@ -11,15 +11,16 @@ interface IProps {
 type Props = IProps;
 
 export default class AuthorizedLayout extends React.Component<Props, {}> {
-    public render() {
-
-        return <div id="authorizedLayout" className="layout">
-            <TopMenu />
-            <div className="container container-content">
-                {this.props.children}
+    public render(): JSX.Element {
+        return (
+            <div id="authorizedLayout" className="layout">
+                <TopMenu />
+                <div className="container container-content">
+                    {this.props.children}
+                </div>
+                <ToastContainer />
+                <Footer />
             </div>
-            <ToastContainer />
-            <Footer />
-        </div>;
+        );
     }
 }
