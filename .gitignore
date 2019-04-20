@@ -1,7 +1,7 @@
-/src/bin/
-/src/node_modules/
-/src/obj/
-/src/ClientApp/dist/
-/src/wwwroot/dist/
-/src/logs/
-/.vs/
+/src/web/bin/
+/src/web/node_modules/
+/src/web/obj/
+/src/web/ClientApp/dist/
+/src/web/wwwroot/dist/
+/src/web/logs/
+/src/.vs/
