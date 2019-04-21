@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Threading.Tasks;
 
 namespace Web.Identity
@@ -9,12 +10,17 @@ namespace Web.Identity
         {
             var defaultUser = new ApplicationUser
             {
+                Id = Guid.NewGuid(),
                 UserName = "test@demo.com",
                 Email = "test@demo.com",
                 FirstName = "Demo",
                 LastName = "User"
             };
-            await userManager.CreateAsync(defaultUser, "123456");
+            var result = await userManager.CreateAsync(defaultUser, "P@ssw0rd!");
+            if (!result.Succeeded)
+            {
+                throw new Exception("Failed to create seed user.");
+            }
         }
     }
 }
