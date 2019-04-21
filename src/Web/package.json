@@ -59,7 +59,7 @@
     "axios": "0.18.0",
     "bind-decorator": "1.0.11",
     "bootstrap-css-only": "3.3.5",
-    "bootstrap3-native": "^1.0.11",
+    "bootstrap3-native": "1.0.11",
     "custom-event-polyfill": "1.0.6",
     "connected-react-router": "6.3.2",
     "domain-wait": "1.1.0",
