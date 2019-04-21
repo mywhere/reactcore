@@ -1,12 +1,17 @@
 using System.Diagnostics;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using reactcore.Models;
+using Web.Models;
+using Web.Setting;
 
-namespace reactcore.Controllers
+namespace Web.Controllers
 {
     public class MainController : ControllerBase
     {
+        public MainController(AppSetting appSetting): base(appSetting)
+        {
+        }
+
         public IActionResult Index()
         {
             var nodeSession = new NodeSession

@@ -2,7 +2,7 @@
 using System.Linq;
 using Newtonsoft.Json;
 
-namespace reactcore.Infrastructure
+namespace Web.Infrastructure
 {
     public class Result
     {

@@ -12,30 +12,35 @@ export interface IProps extends React.DetailedHTMLProps<React.FormHTMLAttributes
 export class Form extends React.PureComponent<IProps> {
     public validator: NValTippy;
 
-    protected form: React.RefObject<HTMLFormElement> = React.createRef<HTMLFormElement>();
+    private readonly _form: React.RefObject<HTMLFormElement>;
+
+    constructor(props: IProps) {
+        super(props);
+        this._form = React.createRef();
+    }
 
     @bind
     public isValid(): boolean {
         return this.validator.isValid();
     }
-    
+
     @bind
     public emptyForm(): void {
-        emptyForm(this.form.current);
+        emptyForm(this._form.current);
     }
-    
+
     @bind
     public getData<T>(): T {
-        return NSerializeJson.serializeForm(this.form.current) as any as T;
+        return NSerializeJson.serializeForm(this._form.current) as any as T;
     }
 
     componentDidMount() {
-        this.validator = new NValTippy(this.form.current);
+        this.validator = new NValTippy(this._form.current);
     }
 
     render(): JSX.Element {
         return (
-            <form {...this.props} ref={this.form}>
+            <form {...this.props} ref={this._form}>
                 {this.props.children}
             </form>
         );

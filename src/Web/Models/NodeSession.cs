@@ -1,4 +1,4 @@
-﻿namespace reactcore.Models
+﻿namespace Web.Models
 {
     /// <summary>
     /// Represents the isomorphic session for web application.

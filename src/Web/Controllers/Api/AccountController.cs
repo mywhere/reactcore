@@ -1,9 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Mvc;
-using reactcore.Models;
-using reactcore.Services;
+﻿using Microsoft.AspNetCore.Mvc;
+using Web.Models;
+using Web.Services;
+using Web.Setting;
 
-namespace reactcore.Controllers.Api
+namespace Web.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -11,7 +11,7 @@ namespace reactcore.Controllers.Api
     {
         private AccountService AccountService { get; set; }
 
-        public AccountController(AccountService accountService)
+        public AccountController(AccountService accountService, AppSetting appSetting) : base(appSetting)
         {
             AccountService = accountService;
         }

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using reactcore.Infrastructure;
-using reactcore.Models;
+using Web.Infrastructure;
+using Web.Models;
 
-namespace reactcore.Services
+namespace Web.Services
 {
     public class AccountService : ServiceBase
     {

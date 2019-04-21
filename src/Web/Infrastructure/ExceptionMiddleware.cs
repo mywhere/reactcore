@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Serilog;
 
-namespace reactcore.Infrastructure
+namespace Web.Infrastructure
 {
     public class ExceptionMiddleware
     {

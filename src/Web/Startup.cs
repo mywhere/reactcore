@@ -9,12 +9,12 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using reactcore.Extensions.Microsoft.Extensions.DependencyInjection;
-using reactcore.Infrastructure;
-using reactcore.Services;
+using Web.Infrastructure;
+using Web.Services;
 using Serilog;
+using Web.Setting;
 
-namespace reactcore
+namespace Web
 {
     public class Startup
     {
@@ -28,7 +28,8 @@ namespace reactcore
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            Configuration.GetSection("AppSettings").Bind(AppSettings.Default);
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            var appSettings = appSettingsSection.Get<AppSetting>();
 
             services.AddLogging(loggingBuilder =>
                 loggingBuilder
@@ -38,7 +39,7 @@ namespace reactcore
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddNodeServices();
             services.AddSpaPrerenderer();
-
+            services.AddSingleton(appSettings);
             // Add your own services here.
             services.AddScoped<AccountService>();
             services.AddScoped<PersonService>();

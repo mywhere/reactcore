@@ -1,6 +1,5 @@
 ﻿@inject Microsoft.AspNetCore.SpaServices.Prerendering.ISpaPrerenderer prerenderer
-@using Newtonsoft.Json
-@model reactcore.Models.NodeSession
+@model Web.Models.NodeSession
 @{
     Layout = null;
 
@@ -20,7 +19,7 @@
 
     <link rel="stylesheet" href="~/dist/vendor.css" asp-append-version="true" />
 
-    @if (!AppSettings.Default.IsDevelopment)
+    @if (!ViewBag.IsDevelopment)
     {
         <link rel="stylesheet" href="~/dist/site.css" asp-append-version="true" />
     }

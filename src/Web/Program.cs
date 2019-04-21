@@ -9,8 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
+using Web.Setting;
 
-namespace reactcore
+namespace Web
 {
     public class Program
     {
@@ -20,19 +21,26 @@ namespace reactcore
                 .WriteTo.AzureApp()
                 .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
-            BuildWebHost(args).Run();
+            var host = CreateWebHostBuilder(args).Build();
+
+            host.Run();
         }
 
-        public static IWebHost BuildWebHost(string[] args) =>
+        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-#if !DEBUG
-                .UseConfiguration(new ConfigurationBuilder()
-                    .SetBasePath(Directory.GetCurrentDirectory())
-                    .AddJsonFile("hosting.json", optional: true)
-                    .Build()
-                )
-#endif
-                .UseStartup<Startup>()
-                .Build();
+                .ConfigureAppConfiguration((context, configBuilder) => {
+                    var builtConfig = configBuilder.Build();
+                    var appSettingsSection = builtConfig.GetSection("AppSettings");
+                    var appSetting = appSettingsSection.Get<AppSetting>();
+
+                    if (appSetting.KeyVault.Enabled)
+                    {
+                        configBuilder.AddAzureKeyVault(
+                            $"https://{appSetting.KeyVault.VaultName}.vault.azure.net/",
+                            appSetting.KeyVault.ClientId,
+                            appSetting.KeyVault.ClientSecret);
+                    }
+                })
+                .UseStartup<Startup>();
     }
 }

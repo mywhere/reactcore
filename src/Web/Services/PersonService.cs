@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using reactcore.Infrastructure;
-using reactcore.Models;
+using Web.Infrastructure;
+using Web.Models;
 
-namespace reactcore.Services
+namespace Web.Services
 {
     public class PersonService : ServiceBase
     {

@@ -1,4 +1,4 @@
-﻿namespace reactcore.Models
+﻿namespace Web.Models
 {
     public class PersonModel
     {

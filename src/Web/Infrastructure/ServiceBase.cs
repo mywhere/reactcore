@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.ExceptionServices;
 
-namespace reactcore.Infrastructure
+namespace Web.Infrastructure
 {
     public abstract class ServiceBase
     {

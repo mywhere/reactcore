@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using reactcore.Models;
-using reactcore.Services;
+using Web.Models;
+using Web.Services;
+using Web.Setting;
 
-namespace reactcore.Controllers.Api
+namespace Web.Controllers.Api
 {
     [ApiController]
     [Route("api/[controller]")]
@@ -10,7 +11,7 @@ namespace reactcore.Controllers.Api
     {
         private PersonService PersonService { get; }
 
-        public PersonController(PersonService personService)
+        public PersonController(PersonService personService, AppSetting appSetting): base(appSetting)
         {
             PersonService = personService;
         }
