@@ -9,11 +9,11 @@ namespace Web.Controllers
     {
         protected ServiceUser ServiceUser { get; set; }
 
-        protected AppSetting AppSetting { get; private set; }
+        protected AppSettings AppSettings { get; private set; }
 
-        public ControllerBase(AppSetting appSetting)
+        public ControllerBase(AppSettings settings)
         {
-            this.AppSetting = appSetting;
+            this.AppSettings = settings;
         }
 
         public override void OnActionExecuting(ActionExecutingContext context)
@@ -25,7 +25,7 @@ namespace Web.Controllers
                     Constants.HttpContextServiceUserItemKey,
                     out object serviceUser);
             ServiceUser = serviceUser as ServiceUser;
-            ViewBag.IsDevelopment = this.AppSetting.IsDevelopment;
+            ViewBag.IsDevelopment = this.AppSettings.IsDevelopment;
 
             base.OnActionExecuting(context);
         }

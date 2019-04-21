@@ -8,7 +8,7 @@ namespace Web.Controllers
 {
     public class MainController : ControllerBase
     {
-        public MainController(AppSetting appSetting): base(appSetting)
+        public MainController(AppSettings settings): base(settings)
         {
         }
 

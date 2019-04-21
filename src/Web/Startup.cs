@@ -25,9 +25,7 @@ namespace Web
 
         public void ConfigureDevelopmentServices(IServiceCollection services)
         {
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSetting>(appSettingsSection);
-            var appSettings = appSettingsSection.Get<AppSetting>();
+            var appSettings = this.getSettings(services);
             var secretAppSettings = new SecretAppSettings(Configuration, appSettings);
 
             // For development env, it use in memory database
@@ -37,9 +35,7 @@ namespace Web
 
         public void ConfigureProductionServices(IServiceCollection services)
         {
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            services.Configure<AppSetting>(appSettingsSection);
-            var appSettings = appSettingsSection.Get<AppSetting>();
+            var appSettings = this.getSettings(services);
             var secretAppSettings = new SecretAppSettings(Configuration, appSettings);
 
             // For producation env, it use SQL database.
@@ -52,14 +48,15 @@ namespace Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
-            var appSettingsSection = Configuration.GetSection("AppSettings");
-            var appSettings = appSettingsSection.Get<AppSetting>();
-
+            var appSettings = this.getSettings(services);
             services.AddLogging(loggingBuilder =>
                 loggingBuilder
                     .AddSerilog(dispose: true)
                     .AddAzureWebAppDiagnostics()
                 );
+
+            services.ConfigureIdentity();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             services.AddNodeServices();
             services.AddSpaPrerenderer();
@@ -104,6 +101,7 @@ namespace Web
             }
 
             app.UseStaticFiles();
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
@@ -115,6 +113,13 @@ namespace Web
                     name: "spa-fallback",
                     defaults: new { controller = "Main", action = "Index" });
             });
+        }
+
+        private AppSettings getSettings(IServiceCollection services)
+        {
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSection);
+            return appSettingsSection.Get<AppSettings>();
         }
     }
 }

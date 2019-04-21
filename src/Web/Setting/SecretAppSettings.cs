@@ -5,9 +5,9 @@ namespace Web.Setting
     public class SecretAppSettings
     {
         private readonly IConfiguration configuration;
-        private readonly AppSetting appSettings;
+        private readonly AppSettings appSettings;
 
-        public SecretAppSettings(IConfiguration config, AppSetting appSettings)
+        public SecretAppSettings(IConfiguration config, AppSettings appSettings)
         {
             this.configuration = config;
             this.appSettings = appSettings;

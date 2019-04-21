@@ -13,7 +13,6 @@ namespace Web.Infrastructure
 
         public Result()
         {
-
         }
 
         public Result(params string[] errors)

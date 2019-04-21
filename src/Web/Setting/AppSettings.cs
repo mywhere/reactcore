@@ -2,7 +2,7 @@
 
 namespace Web.Setting
 {
-    public class AppSetting
+    public class AppSettings
     {
         public bool IsDevelopment =>
             Environment.GetEnvironmentVariables()["ASPNETCORE_ENVIRONMENT"]?.ToString() == "Development";

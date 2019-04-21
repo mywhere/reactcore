@@ -249,8 +249,7 @@ namespace Web.Extensions
             {
                 services.AddDefaultIdentity<ApplicationUser>()
                     .AddEntityFrameworkStores<AppIdentityDbContext>()
-                    .AddSignInManager()
-                    .AddDefaultTokenProviders();
+                    .AddSignInManager();
             }
 
             public static void ConfigureDbContext(this IServiceCollection services, SecretAppSettings secretAppSettings, bool development = false)

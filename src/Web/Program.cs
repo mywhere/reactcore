@@ -1,14 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
-using Serilog.Events;
+using System;
+using Web.Identity;
 using Web.Setting;
 
 namespace Web
@@ -21,7 +18,22 @@ namespace Web
                 .WriteTo.AzureApp()
                 .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
                 .CreateLogger();
+
             var host = CreateWebHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                try
+                {
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    AppIdentityDbContextSeed.SeedAsync(userManager).Wait();
+                }
+                catch(Exception ex)
+                {
+                    Log.Logger.Error(ex, "An error occured when seeding the dataContext.");
+                }
+            }
 
             host.Run();
         }
@@ -31,7 +43,7 @@ namespace Web
                 .ConfigureAppConfiguration((context, configBuilder) => {
                     var builtConfig = configBuilder.Build();
                     var appSettingsSection = builtConfig.GetSection("AppSettings");
-                    var appSetting = appSettingsSection.Get<AppSetting>();
+                    var appSetting = appSettingsSection.Get<AppSettings>();
 
                     if (appSetting.KeyVault.Enabled)
                     {

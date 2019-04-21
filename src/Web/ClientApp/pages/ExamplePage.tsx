@@ -167,7 +167,7 @@ class ExamplePage extends React.Component<Props, IState> {
         return (
             <div>
                 <Helmet>
-                    <title>Example - RCB</title>
+                    <title>Example - asp.net core with react</title>
                 </Helmet>
 
                 <Loader show={this.props.indicators.operationLoading} />

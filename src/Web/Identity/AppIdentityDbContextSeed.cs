@@ -9,12 +9,12 @@ namespace Web.Identity
         {
             var defaultUser = new ApplicationUser
             {
-                UserName = "demouser@microsoft.com",
-                Email = "demouser@microsoft.com",
+                UserName = "test@demo.com",
+                Email = "test@demo.com",
                 FirstName = "Demo",
                 LastName = "User"
             };
-            await userManager.CreateAsync(defaultUser, "Pass@word1");
+            await userManager.CreateAsync(defaultUser, "123456");
         }
     }
 }

@@ -1,14 +1,15 @@
-﻿import { ILoginModel } from "@Models/ILoginModel";
-import Loader from "@Components/shared/Loader";
-import { ApplicationState } from "@Store/index";
-import { LoginStore } from "@Store/LoginStore";
-import "@Styles/main.scss";;
-import * as React from "react";
+﻿import * as React from "react";
 import { Helmet } from "react-helmet";
 import { connect } from "react-redux";
 import { Redirect, RouteComponentProps, withRouter } from "react-router";
 import bind from 'bind-decorator';
+
+import { ILoginModel } from "@Models/ILoginModel";
+import Loader from "@Components/shared/Loader";
+import { ApplicationState } from "@Store/index";
+import { LoginStore } from "@Store/LoginStore";
 import { Form as FormComponent } from "@Components/shared/Form";
+import "@Styles/main.scss";
 
 type Props = RouteComponentProps<{}> & typeof LoginStore.actionCreators & LoginStore.IState;
 
@@ -46,7 +47,7 @@ class LoginPage extends React.PureComponent<Props> {
         return (
             <div id="loginPage">
                 <Helmet>
-                    <title>Login page - RCB</title>
+                    <title>Login page - asp.net core with react</title>
                 </Helmet>
 
                 <Loader ref={this._loader} show={this.props.indicators.operationLoading} />

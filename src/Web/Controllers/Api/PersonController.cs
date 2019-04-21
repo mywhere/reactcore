@@ -11,7 +11,7 @@ namespace Web.Controllers.Api
     {
         private PersonService PersonService { get; }
 
-        public PersonController(PersonService personService, AppSetting appSetting): base(appSetting)
+        public PersonController(PersonService personService, AppSettings settings): base(settings)
         {
             PersonService = personService;
         }
