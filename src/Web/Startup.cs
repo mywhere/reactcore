@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +10,7 @@ using Web.Infrastructure;
 using Web.Services;
 using Serilog;
 using Web.Setting;
+using Web.Extensions.Microsoft.Extensions.DependencyInjection;
 
 namespace Web
 {
@@ -24,6 +22,32 @@ namespace Web
         }
 
         public IConfiguration Configuration { get; }
+
+        public void ConfigureDevelopmentServices(IServiceCollection services)
+        {
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSetting>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSetting>();
+            var secretAppSettings = new SecretAppSettings(Configuration, appSettings);
+
+            // For development env, it use in memory database
+            services.ConfigureDbContext(secretAppSettings, development: true);
+            ConfigureServices(services);
+        }
+
+        public void ConfigureProductionServices(IServiceCollection services)
+        {
+            var appSettingsSection = Configuration.GetSection("AppSettings");
+            services.Configure<AppSetting>(appSettingsSection);
+            var appSettings = appSettingsSection.Get<AppSetting>();
+            var secretAppSettings = new SecretAppSettings(Configuration, appSettings);
+
+            // For producation env, it use SQL database.
+            // TODO: add connection string for data/identity in App settings.
+            // TODO: support azure key vault support.
+            services.ConfigureDbContext(secretAppSettings, development: false);
+            ConfigureServices(services);
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)

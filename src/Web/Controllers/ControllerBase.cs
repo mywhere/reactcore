@@ -7,7 +7,6 @@ namespace Web.Controllers
 {
     public class ControllerBase : Controller
     {
-        
         protected ServiceUser ServiceUser { get; set; }
 
         protected AppSetting AppSetting { get; private set; }

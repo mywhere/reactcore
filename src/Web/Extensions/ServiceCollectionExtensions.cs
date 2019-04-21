@@ -1,7 +1,11 @@
 ﻿using System;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Web.Identity;
+using Web.Setting;
 
-namespace reactcore.Extensions
+namespace Web.Extensions
 {
     namespace Microsoft.Extensions.DependencyInjection
     {
@@ -239,6 +243,31 @@ namespace reactcore.Extensions
                 return services
                     .AddTransient(implementationFactory)
                     .AddTransient(x => new Lazy<TService>(() => x.GetRequiredService<TService>()));
+            }
+
+            public static void ConfigureIdentity(this IServiceCollection services)
+            {
+                services.AddDefaultIdentity<ApplicationUser>()
+                    .AddEntityFrameworkStores<AppIdentityDbContext>()
+                    .AddSignInManager()
+                    .AddDefaultTokenProviders();
+            }
+
+            public static void ConfigureDbContext(this IServiceCollection services, SecretAppSettings secretAppSettings, bool development = false)
+            {
+                if (development)
+                {
+
+                    services.AddDbContext<AppIdentityDbContext>(
+                        options => options.UseInMemoryDatabase("Identity")
+                    );
+                }
+                else
+                {
+                    services.AddDbContext<AppIdentityDbContext>(
+                        options => options.UseSqlServer(secretAppSettings.IdentityConnectionString)
+                    );
+                }
             }
         }
     }
