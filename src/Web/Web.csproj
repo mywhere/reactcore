@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" />
+    <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.0.2105168" />
     <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
     <PackageReference Include="Serilog.Sinks.AzureApp" Version="2.1.2" />
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
@@ -47,31 +48,18 @@
 
   <Target Name="DebugRunWebpack" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And (!Exists('wwwroot\dist') OR Exists('wwwroot\dist\production_build')) ">
 
-	<Exec Command="RD /S /Q wwwroot\dist" />
-	<Exec Command="RD /S /Q ClientApp\dist" />
-
-	<!-- Ensure Node.js is installed -->
+	  <!-- Ensure Node.js is installed -->
     <Exec Command="node --version" ContinueOnError="true">
       <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
     </Exec>
     <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
 
-    <Message Importance="high" Text="Performing Webpack build..." />
-    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js" />
-    <Exec Command="node node_modules/webpack/bin/webpack.js" />
+    <Exec Command="npm run build:dev" />
   </Target>
 
   <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
-	<Exec Command="RD /S /Q wwwroot\dist" />
-	<Exec Command="RD /S /Q ClientApp\dist" />
-	<Exec Condition="!Exists('wwwroot')" Command="mkdir wwwroot" />
-	<Exec Condition="!Exists('wwwroot\dist')" Command="mkdir wwwroot\dist" />
-	<Exec Command="type nul &gt; wwwroot\dist\production_build" />
-
-    <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
     <Exec Command="npm install" />
-    <Exec Command="node node_modules/webpack/bin/webpack.js --config webpack.config.vendor.js --env.prod" />
-    <Exec Command="node node_modules/webpack/bin/webpack.js --env.prod" />
+    <Exec Command="npm run build:prod" />
 
     <!-- Include the newly-built files in the publish output -->
     <ItemGroup>
